@@ -1,0 +1,84 @@
+-- Bài 1 :
+SELECT m.id,m.title ,m.description , d.full_name ,m.`length` , m.rating , tt.name , JSON_ARRAYAGG(w.full_name)
+
+FROM movie m
+	INNER JOIN director d ON d.id = m.id_director 
+	INNER JOIN title_type tt ON tt.id = m.id_title_type 
+	INNER JOIN movie_writers mw ON mw.id_movie = m.id 
+	INNER JOIN writers w ON w.id = mw.id_writer 
+	
+	WHERE tt.name  = 'movie'
+	GROUP BY m.id
+-- BÀI 2
+
+SELECT m.name, COUNT(m.id)
+FROM manufacturer m
+INNER JOIN movie_manufacturer mm ON mm.id_manufacturer  = m.id 
+INNER JOIN movie m2 ON m2.id = mm.id_movie 
+
+GROUP BY m.id
+
+
+-- BÀI 3
+SELECT m.id , m.title 
+FROM movie m 
+	INNER JOIN title_type tt ON tt.id = m.id_title_type 
+	
+	WHERE m.episode = m.current_episode
+	AND tt.name = 'TV Series'
+	
+	
+-- Bài 4
+	SELECT m.id , m.title , m.description ,m.poster , m.`length` , m.imdb 
+	FROM movie m 
+	INNER JOIN title_type tt ON tt.id = m.id_title_type
+	
+	WHERE tt.name = 'Movie'
+	ORDER BY m.imdb DESC
+	
+-- 	Bài 5
+	SELECT m.title , m.description , m.poster , m.`length` , JSON_ARRAYAGG(g.name), m.episode ,m.current_episode , m.release_date,tt.name 
+	FROM movie m 
+	INNER JOIN title_type tt ON tt.id = m.id_title_type
+	INNER JOIN movie_genres mg ON mg.id_movie = m.id 
+	INNER JOIN genres g ON g.id = mg.id_genres 
+	
+	WHERE tt.name = 'TV mini Series'
+	GROUP BY m.id
+	ORDER BY m.release_date
+	
+-- 	Bài 6
+	
+	SELECT m.title , m.description ,d.full_name as director, m.poster , m.`length` ,
+	JSON_ARRAYAGG(w.full_name ) as writer,
+	JSON_ARRAYAGG(g.name  ) as gennes,
+	JSON_ARRAYAGG(a.full_name  ) as actor, m.imdb
+	
+	FROM movie m 
+	
+		INNER JOIN director d ON d.id = m.id_director 
+		INNER JOIN movie_writers mw ON mw.id_movie = m.id 
+		INNER JOIN writers w ON w.id = mw.id_writer 
+		INNER JOIN movie_genres mg ON mg.id_movie = m.id 
+		INNER JOIN genres g ON g.id = mg.id_genres 
+		INNER JOIN movie_actor ma ON ma.id_movie = m.id
+		INNER JOIN actor a ON a.id = ma.id_actor 
+		
+		GROUP BY m.id 
+		ORDER BY m.imdb DESC
+		limit 10
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+	
+	
+	
+	
